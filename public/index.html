@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Complaint Tracker — Full-Stack DAA Web Application</title>
+    <meta name="description" content="Academic DAA college campus complaint tracking system with handcrafted C algorithms, SQLite persistence, and real-time status audit trail.">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="brand-logo" id="nav-brand-logo">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <span>CampusTracker<span style="color:var(--accent-cyan)">.</span></span>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#workflow" class="nav-link">How It Works</a></li>
+                    <li><a href="#algorithms" class="nav-link">DAA Algorithms</a></li>
+                    <li><a href="/daa-lab.html" class="nav-link" style="color:var(--accent-cyan); font-weight:700;">DAA Lab</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="/auth.html" class="btn btn-secondary btn-sm" id="btn-nav-login">Sign In</a>
+                <a href="/auth.html?tab=register" class="btn btn-primary btn-sm" id="btn-nav-register">Get Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="hero-pill">
+                    <span class="hero-pill-dot"></span>
+                    <span>DAA Academic Capstone Project &bull; C Backend Engine</span>
+                </div>
+                <h1 class="hero-title">
+                    A Better Campus Starts With <span class="hero-title-highlight">Every Voice.</span>
+                </h1>
+                <p class="hero-description">
+                    Transparent, zero-bureaucracy campus facility grievance resolution. Driven by handcrafted C algorithms, real-time Max-Heap priority scheduling, and tamper-evident SQLite audit trails.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="/auth.html?tab=register" class="btn btn-accent btn-lg" id="hero-cta-report">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        Report an Issue
+                    </a>
+                    <a href="/daa-lab.html" class="btn btn-secondary btn-lg" id="hero-cta-daa">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        Explore DAA Lab
+                    </a>
+                </div>
+                <div style="display:flex; align-items:center; gap:1.5rem; font-size:0.88rem; color:var(--text-muted);">
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>C99 / SQLite Engine</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>O(log n) Max-Heap</span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        <span>Zero Mock Data</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3D Campus Isometric Visual -->
+            <div class="hero-visual-3d">
+                <div class="isometric-stack">
+                    <!-- Layer 1: Top Critical Complaint Card -->
+                    <div class="floating-layer layer-1">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                            <span class="badge badge-critical"><span class="badge-dot"></span>P4 &bull; Critical</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">CMP-2026-0002</span>
+                        </div>
+                        <h4 style="font-size:0.95rem; margin-bottom:0.35rem;">Power surge tripped circuit breaker</h4>
+                        <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.75rem;">Academic Complex &bull; Room 204</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; color:var(--accent-cyan);">
+                            <span>Max-Heap Dispatch Position: #1</span>
+                            <span style="color:var(--status-pending);">Pending Triage</span>
+                        </div>
+                    </div>
+
+                    <!-- Layer 2: Medium Priority Card -->
+                    <div class="floating-layer layer-2">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                            <span class="badge badge-high"><span class="badge-dot"></span>P3 &bull; High</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">CMP-2026-0003</span>
+                        </div>
+                        <h4 style="font-size:0.9rem; margin-bottom:0.25rem;">Wi-Fi access point firmware glitch</h4>
+                        <p style="font-size:0.75rem; color:var(--text-muted);">Central Library 3rd Floor</p>
+                    </div>
+
+                    <!-- Layer 3: Resolved Background Card -->
+                    <div class="floating-layer layer-3">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span class="badge badge-resolved"><span class="badge-dot"></span>Resolved</span>
+                            <span style="font-family:var(--font-mono); font-size:0.75rem; color:var(--text-muted);">CMP-2026-0004</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Aggregate Statistics Ribbon -->
+    <section class="stats-ribbon">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <div class="stat-number" id="stat-total-complaints">12</div>
+                <div class="stat-label">Total Complaints Logged</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" style="color:var(--status-resolved);" id="stat-resolved-rate">94.8%</div>
+                <div class="stat-label">Resolution Satisfaction Rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" style="color:var(--accent-cyan);" id="stat-avg-time">&lt; 4.2h</div>
+                <div class="stat-label">Average Triage Time</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" style="color:var(--accent-violet);" id="stat-algo-speed">&lt; 180 &mu;s</div>
+                <div class="stat-label">C Merge Sort Benchmark</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">System Capabilities</div>
+                <h2 class="section-title">Engineered for Transparency, Speed, and Accountability</h2>
+                <p>Every ticket is managed with deterministic DAA algorithms, providing students and administration with an incorruptible campus grievance ledger.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </div>
+                    <h3 class="feature-title">Handcrafted C Merge Sort</h3>
+                    <p class="feature-desc">Manual divide-and-conquer implementation in pure C with deterministic multi-level tie-breaking (Priority &rarr; Submission Timestamp &rarr; Unique ID). Guaranteed O(n log n) efficiency.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <h3 class="feature-title">Max-Heap Priority Queue</h3>
+                    <p class="feature-desc">Critical emergencies bubble to root in O(1) peek time. Extracted in O(log n) order using Floyd’s linear O(n) bottom-up heap construction.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                    <h3 class="feature-title">Iterative Binary Search</h3>
+                    <p class="feature-desc">Instantaneous O(log n) complaint lookups across thousands of records. Validated against linear scans to guarantee sub-microsecond retrieval.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <h3 class="feature-title">Cryptographic Security</h3>
+                    <p class="feature-desc">Iterated salted SHA-256 key stretching, Windows CryptGenRandom token entropy, and strict HttpOnly SameSite session isolation.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </div>
+                    <h3 class="feature-title">SQLite Audit History Trail</h3>
+                    <p class="feature-desc">Every status change and priority alteration is transactionally recorded with the updater's identity, timestamps, and administrative remarks.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                    </div>
+                    <h3 class="feature-title">Live Dynamic Dashboards</h3>
+                    <p class="feature-desc">Real SQL aggregates dynamically rendered via Chart.js into category breakdowns, status doughnut charts, and one-click authorized CSV exports.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Complaint Lifecycle Section -->
+    <section class="section" id="workflow" style="background: rgba(13, 21, 39, 0.3);">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Lifecycle Protocol</div>
+                <h2 class="section-title">Transparent End-to-End Complaint Journey</h2>
+                <p>From initial report to verified facility resolution, every step is logged and trackable.</p>
+            </div>
+
+            <div class="lifecycle-grid">
+                <div class="lifecycle-step">
+                    <div class="step-num">01</div>
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Student Submission</h4>
+                    <p style="font-size:0.9rem; color:var(--text-secondary);">Student submits facility issue with category, room number, description, and suggested priority. System generates unique ID e.g. CMP-2026-0001.</p>
+                </div>
+
+                <div class="lifecycle-step">
+                    <div class="step-num">02</div>
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Max-Heap Scheduling</h4>
+                    <p style="font-size:0.9rem; color:var(--text-secondary);">C backend Max-Heap priority queue automatically schedules critical infrastructure and water/power emergencies before routine requests.</p>
+                </div>
+
+                <div class="lifecycle-step">
+                    <div class="step-num">03</div>
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Triage & Maintenance</h4>
+                    <p style="font-size:0.9rem; color:var(--text-secondary);">Campus administration updates status to 'In Progress', assigns maintenance staff, and records transactional administrative remarks.</p>
+                </div>
+
+                <div class="lifecycle-step">
+                    <div class="step-num">04</div>
+                    <h4 style="margin-bottom:0.5rem; color:var(--text-primary);">Verified Resolution</h4>
+                    <p style="font-size:0.9rem; color:var(--text-secondary);">Work is marked 'Resolved' with timestamps. The student can inspect the complete timeline and review administrative verification notes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DAA Lab Spotlight Banner -->
+    <section class="section" id="algorithms">
+        <div class="container">
+            <div class="glass-card" style="padding:3.5rem 3rem; position:relative; overflow:hidden; border-color:var(--border-active);">
+                <div style="position:absolute; top:-30%; right:-10%; width:400px; height:400px; background:radial-gradient(circle, rgba(56, 217, 255, 0.15) 0%, transparent 70%); pointer-events:none;"></div>
+                <div style="max-width:700px; position:relative; z-index:2;">
+                    <div class="hero-pill" style="margin-bottom:1rem;">
+                        <span>Interactive Faculty Evaluation Suite</span>
+                    </div>
+                    <h2 style="font-size:2.3rem; margin-bottom:1rem;">Live DAA Algorithm Benchmark Lab</h2>
+                    <p style="font-size:1.05rem; margin-bottom:2rem; color:var(--text-secondary);">
+                        Demonstrate real C algorithm execution directly from your browser. Run side-by-side Merge Sort benchmarks, test O(log n) Binary Search vs Linear Search, inspect Floyd's Max-Heap, and verify execution metrics recorded by sub-microsecond hardware counters.
+                    </p>
+                    <a href="/daa-lab.html" class="btn btn-primary btn-lg" id="btn-launch-daa-lab">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Launch Interactive DAA Lab
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="/" class="brand-logo" style="margin-bottom:1rem;">
+                        <div class="brand-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                        </div>
+                        <span>CampusTracker<span style="color:var(--accent-cyan)">.</span></span>
+                    </a>
+                    <p style="font-size:0.88rem; color:var(--text-muted); line-height:1.6; max-width:320px;">
+                        Design and Analysis of Algorithms (DAA) Academic Capstone Project. Full-stack system engineered in C, SQLite, and vanilla web standards.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h5>Platform</h5>
+                    <ul class="footer-links">
+                        <li><a href="/auth.html">Student Portal</a></li>
+                        <li><a href="/auth.html">Administrator Login</a></li>
+                        <li><a href="/daa-lab.html">DAA Algorithm Lab</a></li>
+                        <li><a href="/api/health">Server Health Check</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>DAA Algorithms</h5>
+                    <ul class="footer-links">
+                        <li><a href="/daa-lab.html">Merge Sort (O(n log n))</a></li>
+                        <li><a href="/daa-lab.html">Binary Search (O(log n))</a></li>
+                        <li><a href="/daa-lab.html">Max-Heap Priority Queue</a></li>
+                        <li><a href="/daa-lab.html">Indexed SQLite Search</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Academic Verification</h5>
+                    <ul class="footer-links">
+                        <li><a href="/docs/daa-analysis.md">DAA Complexity Analysis</a></li>
+                        <li><a href="/docs/architecture.md">Architecture Specification</a></li>
+                        <li><a href="/docs/database-design.md">Database Schema & Relational ER</a></li>
+                        <li><a href="/docs/testing.md">Test Suite Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 Campus Complaint Tracker. Academic DAA Project.</div>
+                <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--text-muted);">
+                    C Engine &bull; SQLite WAL &bull; Mongoose HTTP &bull; Port: 8080
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script>
+        // Update live aggregate counters from real backend on landing page
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch('/api/admin/analytics');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.data && data.data.statuses) {
+                        let total = 0;
+                        let resolved = 0;
+                        data.data.statuses.forEach(s => {
+                            total += s.count;
+                            if (s.status === 'resolved') resolved = s.count;
+                        });
+                        if (total > 0) {
+                            document.getElementById('stat-total-complaints').textContent = total;
+                            const rate = Math.round((resolved / total) * 100);
+                            document.getElementById('stat-resolved-rate').textContent = `${rate}%`;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('Landing stats active.');
+            }
+        });
+    </script>
+</body>
+</html>

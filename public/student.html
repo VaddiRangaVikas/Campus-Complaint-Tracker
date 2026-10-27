@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal — Campus Complaint Tracker</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="brand-logo">
+                    <div class="brand-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    </div>
+                    <span>StudentPortal</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="javascript:void(0)" class="sidebar-link active" id="nav-tab-overview" onclick="showTab('overview')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Overview</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-tab-submit" onclick="showTab('submit')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"></path></svg>
+                    <span>Submit Complaint</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-tab-complaints" onclick="showTab('complaints')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>My Complaints</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-tab-profile" onclick="showTab('profile')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span>Profile Settings</span>
+                </a>
+                <a href="/daa-lab.html" class="sidebar-link" style="color:var(--accent-cyan);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <span>DAA Algorithm Lab</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-badge">
+                    <div class="avatar" id="user-avatar">S</div>
+                    <div class="user-info">
+                        <div class="user-name" id="user-display-name">Loading...</div>
+                        <div class="user-role" id="user-display-role">Student</div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" style="width:100%; margin-top:0.75rem;" onclick="API.logout()">
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="main-content">
+            <header class="topbar">
+                <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <h3 id="page-heading" style="font-size:1.15rem;">Student Dashboard</h3>
+                <div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="showTab('submit')">
+                        + New Complaint
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- 1. OVERVIEW TAB -->
+                <div class="dashboard-tab active" id="tab-overview">
+                    <div class="kpi-grid">
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Submitted</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-student-total">0</div>
+                            <div class="kpi-subtitle">Lifetime submitted issues</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Pending Review</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFBF69" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-pending);" id="kpi-student-pending">0</div>
+                            <div class="kpi-subtitle">Awaiting facility assignment</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">In Progress</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38D9FF" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-progress);" id="kpi-student-progress">0</div>
+                            <div class="kpi-subtitle">Active maintenance ongoing</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Resolved</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-resolved);" id="kpi-student-resolved">0</div>
+                            <div class="kpi-subtitle">Verified & closed tickets</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts & Recent Activity Grid -->
+                    <div style="display:grid; grid-template-columns: 1fr 1.3fr; gap:1.5rem;" class="responsive-two-col">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 style="font-size:1rem;">Status Distribution</h4>
+                            </div>
+                            <div style="height:240px; position:relative;">
+                                <canvas id="chart-student-status"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="glass-card" style="padding:1.5rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+                                <h4 style="font-size:1rem;">Recent Activity</h4>
+                                <a href="javascript:void(0)" onclick="showTab('complaints')" style="font-size:0.85rem;">View All &rarr;</a>
+                            </div>
+                            <div id="student-recent-list" style="display:flex; flex-direction:column; gap:0.75rem;">
+                                <p style="color:var(--text-muted); font-size:0.9rem;">Loading recent complaints...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. SUBMIT COMPLAINT TAB -->
+                <div class="dashboard-tab" id="tab-submit">
+                    <div class="glass-card" style="max-width:800px; margin:0 auto; padding:2.5rem;">
+                        <h3 style="margin-bottom:0.5rem;">Lodge New Campus Complaint</h3>
+                        <p style="font-size:0.92rem; color:var(--text-secondary); margin-bottom:2rem;">
+                            Your ticket will be assigned a deterministic priority via our C Max-Heap scheduling algorithm.
+                        </p>
+
+                        <form id="form-submit-complaint" onsubmit="handleComplaintSubmit(event)">
+                            <div class="form-group">
+                                <label class="form-label" for="comp-title">Complaint Title *</label>
+                                <input type="text" id="comp-title" class="form-control" placeholder="Brief summary of the issue" required maxlength="120">
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label" for="comp-category">Facility Category *</label>
+                                    <select id="comp-category" class="form-select" required>
+                                        <option value="" disabled selected>Select Category</option>
+                                        <option value="Hostel">Hostel</option>
+                                        <option value="Classroom">Classroom</option>
+                                        <option value="Electricity">Electricity</option>
+                                        <option value="Water Supply">Water Supply</option>
+                                        <option value="Internet and Wi-Fi">Internet and Wi-Fi</option>
+                                        <option value="Cleanliness">Cleanliness</option>
+                                        <option value="Library">Library</option>
+                                        <option value="Laboratory">Laboratory</option>
+                                        <option value="Transport">Transport</option>
+                                        <option value="Canteen">Canteen</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="comp-priority">Suggested Urgency *</label>
+                                    <select id="comp-priority" class="form-select" required>
+                                        <option value="1">Low (Routine maintenance)</option>
+                                        <option value="2" selected>Medium (Standard request)</option>
+                                        <option value="3">High (Impacting coursework / daily living)</option>
+                                        <option value="4">Critical (Hazard, power cut, flooding)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+                                <div class="form-group">
+                                    <label class="form-label" for="comp-location">Location / Building *</label>
+                                    <input type="text" id="comp-location" class="form-control" placeholder="e.g. Hostel Block A, Academic Wing" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="comp-room">Room / Bay / Floor</label>
+                                    <input type="text" id="comp-room" class="form-control" placeholder="e.g. Room 302, 3rd Floor">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="comp-description">Detailed Description *</label>
+                                <textarea id="comp-description" class="form-control" rows="4" placeholder="Describe the problem, when it started, and exact details to help maintenance technicians..." required maxlength="2000"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-lg" style="width:100%;" id="btn-submit-ticket">
+                                Submit Complaint to SQLite Backend
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 3. MY COMPLAINTS TAB -->
+                <div class="dashboard-tab" id="tab-complaints">
+                    <div class="filter-bar">
+                        <div class="search-input-group">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="filter-search" placeholder="Search by ID, title, or location..." oninput="applyFilters()">
+                        </div>
+
+                        <div class="filter-selects">
+                            <select id="filter-status" class="form-select" onchange="applyFilters()">
+                                <option value="all">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                            </select>
+
+                            <select id="filter-priority" class="form-select" onchange="applyFilters()">
+                                <option value="all">All Priorities</option>
+                                <option value="4">Critical (P4)</option>
+                                <option value="3">High (P3)</option>
+                                <option value="2">Medium (P2)</option>
+                                <option value="1">Low (P1)</option>
+                            </select>
+
+                            <select id="filter-sort" class="form-select" onchange="applyFilters()">
+                                <option value="date_desc">Newest First</option>
+                                <option value="date_asc">Oldest First</option>
+                                <option value="priority_desc">Highest Priority (Heap)</option>
+                                <option value="id_asc">Complaint ID</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass-card table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Complaint ID</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-complaints-tbody">
+                                <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:2rem;">Loading complaints...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. PROFILE TAB -->
+                <div class="dashboard-tab" id="tab-profile">
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; max-width:960px;" class="responsive-two-col">
+                        <div class="glass-card" style="padding:2rem;">
+                            <h4 style="margin-bottom:1.5rem;">Academic Profile</h4>
+                            <form id="form-update-profile" onsubmit="handleProfileUpdate(event)">
+                                <div class="form-group">
+                                    <label class="form-label" for="prof-fullname">Full Name</label>
+                                    <input type="text" id="prof-fullname" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="prof-email">Email Address</label>
+                                    <input type="email" id="prof-email" class="form-control" disabled style="opacity:0.6;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="prof-studentid">Student ID</label>
+                                    <input type="text" id="prof-studentid" class="form-control" disabled style="opacity:0.6;">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="prof-dept">Department</label>
+                                    <input type="text" id="prof-dept" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="btn-save-profile">Save Profile Changes</button>
+                            </form>
+                        </div>
+
+                        <div class="glass-card" style="padding:2rem;">
+                            <h4 style="margin-bottom:1.5rem;">Change Password</h4>
+                            <form id="form-change-password" onsubmit="handleChangePassword(event)">
+                                <div class="form-group">
+                                    <label class="form-label" for="pw-current">Current Password</label>
+                                    <input type="password" id="pw-current" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="pw-new">New Password</label>
+                                    <input type="password" id="pw-new" class="form-control" minlength="6" required>
+                                </div>
+                                <button type="submit" class="btn btn-secondary" id="btn-save-pw">Update Password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Complaint Detail & Timeline Modal -->
+    <div class="modal-overlay" id="modal-complaint-detail">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-comp-id" style="font-family:var(--font-mono); font-size:1.15rem; color:var(--accent-cyan);">CMP-2026-0001</h3>
+                    <div id="modal-comp-title" style="font-weight:700; font-size:1.1rem; margin-top:0.25rem;">Complaint Title</div>
+                </div>
+                <button type="button" class="modal-close" onclick="closeDetailModal()">&times;</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; background:rgba(13,21,39,0.5); padding:1rem; border-radius:var(--radius-sm);">
+                <div>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Category</div>
+                    <div id="modal-comp-category" style="font-weight:600;">Category</div>
+                </div>
+                <div>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Priority</div>
+                    <div id="modal-comp-priority">Priority</div>
+                </div>
+                <div>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Location</div>
+                    <div id="modal-comp-location">Location</div>
+                </div>
+                <div>
+                    <div style="font-size:0.78rem; color:var(--text-muted);">Current Status</div>
+                    <div id="modal-comp-status">Status</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom:1.5rem;">
+                <div style="font-size:0.85rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.4rem;">Description</div>
+                <p id="modal-comp-desc" style="font-size:0.92rem; color:var(--text-primary); line-height:1.6; background:rgba(13,21,39,0.4); padding:0.9rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);"></p>
+            </div>
+
+            <div>
+                <h4 style="font-size:0.95rem; margin-bottom:0.75rem;">Status Audit Timeline</h4>
+                <div class="timeline" id="modal-comp-timeline">
+                    <!-- Timeline items generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Confirmation Dialog Modal -->
+    <div class="modal-overlay" id="modal-success-confirm">
+        <div class="modal-content" style="max-width:440px; text-align:center;">
+            <div style="width:60px; height:60px; border-radius:50%; background:rgba(45, 212, 167, 0.15); display:inline-flex; align-items:center; justify-content:center; margin-bottom:1rem;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3 style="margin-bottom:0.5rem;">Complaint Registered!</h3>
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:1.25rem;">Your complaint has been permanently written to SQLite and scheduled in the priority queue.</p>
+            <div style="background:rgba(13, 21, 39, 0.8); border:1px dashed var(--accent-cyan); border-radius:var(--radius-sm); padding:1rem; margin-bottom:1.5rem;">
+                <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Tracking Reference ID</div>
+                <div id="confirm-complaint-id" style="font-size:1.35rem; font-weight:800; color:var(--accent-cyan); font-family:var(--font-mono); margin-top:0.25rem;">CMP-2026-0001</div>
+            </div>
+            <button type="button" class="btn btn-primary" style="width:100%;" onclick="closeSuccessModal()">
+                Track Status on Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/student.js"></script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAA Algorithm Laboratory — Campus Complaint Tracker</title>
+    <meta name="description" content="Interactive Design & Analysis of Algorithms demonstration page for faculty evaluation. Handcrafted C Merge Sort, Binary Search, and Max-Heap benchmarks.">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/chart.umd.min.js"></script>
+    <style>
+        .lab-hero {
+            padding: 3.5rem 0 2.5rem;
+            text-align: center;
+        }
+
+        .algo-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .algo-card {
+            padding: 1.5rem;
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            transition: all var(--transition-normal);
+        }
+
+        .algo-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-4px);
+        }
+
+        .algo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .complexity-table {
+            width: 100%;
+            margin-top: 0.9rem;
+            border-top: 1px solid var(--border-subtle);
+            padding-top: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .complexity-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+        }
+
+        .complexity-val {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        /* Benchmark Playground */
+        .playground-card {
+            padding: 2rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-active);
+            border-radius: var(--radius-md);
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow-card-3d);
+        }
+
+        .playground-controls {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr auto;
+            gap: 1.25rem;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+        }
+
+        .metric-badge-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-stat-card {
+            background: rgba(13, 21, 39, 0.7);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1.1rem;
+            text-align: center;
+        }
+
+        .metric-stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+            margin-top: 0.25rem;
+        }
+
+        .sample-preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .sample-column {
+            background: rgba(13, 21, 39, 0.5);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+        }
+
+        .sample-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+            margin-bottom: 0.4rem;
+            font-size: 0.82rem;
+        }
+
+        @media (max-width: 992px) {
+            .playground-controls { grid-template-columns: 1fr 1fr; }
+            .sample-preview-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .playground-controls { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="brand-logo">
+                <div class="brand-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                </div>
+                <span>DAA Laboratory<span style="color:var(--accent-cyan)">.</span></span>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/" class="nav-link">Home</a></li>
+                    <li><a href="/student.html" class="nav-link">Student Portal</a></li>
+                    <li><a href="/admin.html" class="nav-link">Admin Console</a></li>
+                    <li><a href="#playground" class="nav-link active">Live Benchmarks</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-actions">
+                <a href="/auth.html" class="btn btn-secondary btn-sm">Sign In</a>
+                <a href="#playground" class="btn btn-accent btn-sm">Run Benchmarks</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Header -->
+        <section class="lab-hero">
+            <div class="hero-pill" style="margin-bottom:1rem;">
+                <span>Academic Faculty Demonstration &bull; Pure C Engine</span>
+            </div>
+            <h1 style="font-size:clamp(2rem, 4vw, 3rem); margin-bottom:1rem;">
+                Design & Analysis of Algorithms <span class="hero-title-highlight">Interactive Lab</span>
+            </h1>
+            <p style="max-width:720px; margin:0 auto; font-size:1.05rem; color:var(--text-secondary); line-height:1.6;">
+                Every benchmark execution on this page is transmitted to our native C backend (<code style="color:var(--accent-cyan);">campus_server.exe</code>) via REST API and executed using manual algorithm implementations. Hardware performance counters (<code style="color:var(--accent-cyan);">QueryPerformanceCounter</code>) report real microsecond durations.
+            </p>
+        </section>
+
+        <!-- 5 Algorithm Theory Cards -->
+        <div class="algo-cards-grid">
+            <!-- 1. Merge Sort -->
+            <div class="algo-card">
+                <div class="algo-header">
+                    <h3 style="font-size:1.1rem; color:var(--text-primary);">Algorithm A: Merge Sort</h3>
+                    <span class="badge badge-resolved">Divide &amp; Conquer</span>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                    Handcrafted recursive sorting for complaints by Priority, Submission Timestamp, or ID with deterministic tie-breaking.
+                </p>
+                <div class="complexity-table">
+                    <div class="complexity-row"><span>Best Case:</span><span class="complexity-val">O(n log n)</span></div>
+                    <div class="complexity-row"><span>Average Case:</span><span class="complexity-val">O(n log n)</span></div>
+                    <div class="complexity-row"><span>Worst Case:</span><span class="complexity-val">O(n log n)</span></div>
+                    <div class="complexity-row"><span>Auxiliary Space:</span><span class="complexity-val">O(n)</span></div>
+                </div>
+            </div>
+
+            <!-- 2. Binary Search -->
+            <div class="algo-card">
+                <div class="algo-header">
+                    <h3 style="font-size:1.1rem; color:var(--text-primary);">Algorithm B: Binary Search</h3>
+                    <span class="badge badge-progress">Divide &amp; Conquer</span>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                    Iterative binary search on records sorted strictly by Complaint ID. Cuts search space in half each comparison.
+                </p>
+                <div class="complexity-table">
+                    <div class="complexity-row"><span>Best Case:</span><span class="complexity-val">O(1)</span></div>
+                    <div class="complexity-row"><span>Average Case:</span><span class="complexity-val">O(log n)</span></div>
+                    <div class="complexity-row"><span>Worst Case:</span><span class="complexity-val">O(log n)</span></div>
+                    <div class="complexity-row"><span>Auxiliary Space:</span><span class="complexity-val">O(1)</span></div>
+                </div>
+            </div>
+
+            <!-- 3. Max-Heap -->
+            <div class="algo-card">
+                <div class="algo-header">
+                    <h3 style="font-size:1.1rem; color:var(--text-primary);">Algorithm C: Max-Heap</h3>
+                    <span class="badge badge-critical">Priority Queue</span>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                    Binary Max-Heap for urgent dispatch. Peek root in O(1). Built in linear O(n) via Floyd's bottom-up algorithm.
+                </p>
+                <div class="complexity-table">
+                    <div class="complexity-row"><span>Peek Max:</span><span class="complexity-val">O(1)</span></div>
+                    <div class="complexity-row"><span>Insert / Extract:</span><span class="complexity-val">O(log n)</span></div>
+                    <div class="complexity-row"><span>Floyd's Build:</span><span class="complexity-val">O(n)</span></div>
+                    <div class="complexity-row"><span>Storage:</span><span class="complexity-val">O(n)</span></div>
+                </div>
+            </div>
+
+            <!-- 4. Linear Search -->
+            <div class="algo-card">
+                <div class="algo-header">
+                    <h3 style="font-size:1.1rem; color:var(--text-primary);">Algorithm D: Linear Search</h3>
+                    <span class="badge badge-pending">Baseline Scan</span>
+                </div>
+                <p style="font-size:0.85rem; color:var(--text-secondary);">
+                    Iterative baseline scan used to verify Binary Search correctness and demonstrate O(n) vs O(log n) scaling.
+                </p>
+                <div class="complexity-table">
+                    <div class="complexity-row"><span>Best Case:</span><span class="complexity-val">O(1)</span></div>
+                    <div class="complexity-row"><span>Average Case:</span><span class="complexity-val">O(n)</span></div>
+                    <div class="complexity-row"><span>Worst Case:</span><span class="complexity-val">O(n)</span></div>
+                    <div class="complexity-row"><span>Auxiliary Space:</span><span class="complexity-val">O(1)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live C Backend Benchmark Playground -->
+        <section class="playground-card" id="playground">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; border-bottom:1px solid var(--border-subtle); padding-bottom:1rem;">
+                <div>
+                    <h2 style="font-size:1.5rem;">C Backend Benchmark Execution</h2>
+                    <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:0.25rem;">
+                        Select parameters and trigger live algorithm execution compiled in pure C.
+                    </p>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--status-resolved);">
+                    <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--status-resolved); box-shadow:0 0 8px var(--status-resolved);"></span>
+                    C99 Engine Online (Port 8080)
+                </div>
+            </div>
+
+            <div class="playground-controls">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="lab-algo-select">Select Algorithm Mode</label>
+                    <select id="lab-algo-select" class="form-select" onchange="handleAlgoModeChange()">
+                        <option value="mergesort">Merge Sort (Deterministic Multi-Key)</option>
+                        <option value="search_cmp">Binary Search vs Linear Search (Comparison)</option>
+                        <option value="maxheap">Max-Heap Priority Queue (Floyd's Build &amp; Extract)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label" for="lab-size-select">Input Dataset Size (n)</label>
+                    <select id="lab-size-select" class="form-select">
+                        <option value="50">50 complaints</option>
+                        <option value="100" selected>100 complaints</option>
+                        <option value="500">500 complaints</option>
+                        <option value="1000">1,000 complaints</option>
+                        <option value="2500">2,500 complaints</option>
+                        <option value="5000">5,000 complaints</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;" id="group-search-target">
+                    <label class="form-label" for="lab-target-id">Target Complaint ID</label>
+                    <input type="text" id="lab-target-id" class="form-control" value="CMP-2026-0050" placeholder="e.g. CMP-2026-0050">
+                </div>
+
+                <button type="button" class="btn btn-accent btn-lg" id="btn-run-benchmark" onclick="executeBenchmark()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Run on C Engine
+                </button>
+            </div>
+
+            <!-- Live Metrics Badges -->
+            <div class="metric-badge-box">
+                <div class="metric-stat-card">
+                    <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Execution Duration</div>
+                    <div class="metric-stat-number" id="metric-duration">-- &mu;s</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.2rem;">High-precision QPC</div>
+                </div>
+
+                <div class="metric-stat-card">
+                    <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Key Comparisons</div>
+                    <div class="metric-stat-number" style="color:var(--status-progress);" id="metric-comparisons">--</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.2rem;">Instrumented in C</div>
+                </div>
+
+                <div class="metric-stat-card">
+                    <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Swaps / Movements</div>
+                    <div class="metric-stat-number" style="color:var(--status-pending);" id="metric-movements">--</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.2rem;">Auxiliary Array Moves</div>
+                </div>
+
+                <div class="metric-stat-card">
+                    <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Theoretical Bound</div>
+                    <div class="metric-stat-number" style="color:var(--status-resolved);" id="metric-theory">O(n log n)</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.2rem;" id="metric-space">Aux Space: O(n)</div>
+                </div>
+            </div>
+
+            <!-- Dynamic Output Results -->
+            <div id="benchmark-results-container">
+                <div style="text-align:center; padding:2rem; color:var(--text-muted);">
+                    Click "Run on C Engine" to execute the algorithm on the backend and inspect memory states.
+                </div>
+            </div>
+
+            <!-- Benchmark Scaling Chart -->
+            <div class="chart-card" style="margin-top:2rem;">
+                <div class="chart-header">
+                    <div>
+                        <h4 style="font-size:1rem;">Empirical Scaling Benchmark (C Hardware Measurements)</h4>
+                        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.2rem;">
+                            Measured microseconds (&mu;s) vs theoretical Big-O complexity curves
+                        </p>
+                    </div>
+                </div>
+                <div style="height:260px; position:relative;">
+                    <canvas id="chart-benchmark-scaling"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container" style="text-align:center; padding:2rem 0;">
+            <p style="font-size:0.88rem; color:var(--text-muted);">
+                Design &amp; Analysis of Algorithms (DAA) Capstone Project &bull; Handcrafted in C99 with SQLite
+            </p>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/daa-lab.js"></script>
+</body>
+</html>

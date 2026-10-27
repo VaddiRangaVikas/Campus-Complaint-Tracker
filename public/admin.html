@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrator Dashboard — Campus Complaint Tracker</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="/js/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="/" class="brand-logo">
+                    <div class="brand-icon" style="background: linear-gradient(135deg, #FF647C 0%, var(--accent-violet) 100%);">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <span>AdminPanel</span>
+                </a>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="javascript:void(0)" class="sidebar-link active" id="nav-admin-overview" onclick="showAdminTab('overview')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    <span>Overview</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-admin-manage" onclick="showAdminTab('manage')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    <span>Manage Complaints</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-admin-users" onclick="showAdminTab('users')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>User Directory</span>
+                </a>
+                <a href="javascript:void(0)" class="sidebar-link" id="nav-admin-analytics" onclick="showAdminTab('analytics')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>Analytics & Reports</span>
+                </a>
+                <a href="/daa-lab.html" class="sidebar-link" style="color:var(--accent-cyan);">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <span>DAA Algorithm Lab</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile-badge">
+                    <div class="avatar" style="background: linear-gradient(135deg, #FF647C 0%, #FF9E54 100%);">A</div>
+                    <div class="user-info">
+                        <div class="user-name" id="admin-display-name">Campus Admin</div>
+                        <div class="user-role" style="color:var(--status-critical);">Administrator</div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" style="width:100%; margin-top:0.75rem;" onclick="API.logout()">
+                    Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <button type="button" class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <h3 id="admin-heading" style="font-size:1.15rem;">Campus Administration Console</h3>
+                <div style="display:flex; gap:0.75rem;">
+                    <a href="/api/admin/export.csv" class="btn btn-secondary btn-sm" id="btn-export-csv" download="campus_complaints.csv">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Export CSV
+                    </a>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- 1. OVERVIEW TAB -->
+                <div class="dashboard-tab active" id="tab-admin-overview">
+                    <div class="kpi-grid">
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Total Campus Complaints</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg></div>
+                            </div>
+                            <div class="kpi-value" id="kpi-admin-total">0</div>
+                            <div class="kpi-subtitle">Logged across all departments</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Critical Urgency (P4)</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF647C" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-critical);" id="kpi-admin-critical">0</div>
+                            <div class="kpi-subtitle">Prioritized in C Max-Heap</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Pending Action</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFBF69" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-pending);" id="kpi-admin-pending">0</div>
+                            <div class="kpi-subtitle">Awaiting facility assignment</div>
+                        </div>
+
+                        <div class="glass-card kpi-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Resolved Tickets</span>
+                                <div class="kpi-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2DD4A7" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>
+                            </div>
+                            <div class="kpi-value" style="color:var(--status-resolved);" id="kpi-admin-resolved">0</div>
+                            <div class="kpi-subtitle">Successfully verified</div>
+                        </div>
+                    </div>
+
+                    <!-- Max-Heap Urgent Dispatch Queue -->
+                    <div class="glass-card" style="padding:1.75rem; margin-bottom:2rem; border-color:rgba(255,100,124,0.3);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+                            <div>
+                                <h4 style="font-size:1.05rem; display:flex; align-items:center; gap:0.5rem;">
+                                    <span style="color:var(--status-critical);">⚡</span> Max-Heap Priority Dispatch Queue
+                                </h4>
+                                <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.2rem;">
+                                    Algorithmically ordered by C backend Max-Heap comparator: Critical (P4) &rarr; Oldest Created Date &rarr; Complaint ID
+                                </p>
+                            </div>
+                            <span class="badge badge-critical">Heap Active</span>
+                        </div>
+                        <div id="admin-heap-queue" style="display:flex; flex-direction:column; gap:0.75rem;">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Charts Grid -->
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;" class="responsive-two-col">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 style="font-size:1rem;">Campus Complaints by Category</h4>
+                            </div>
+                            <div style="height:250px; position:relative;">
+                                <canvas id="chart-admin-categories"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h4 style="font-size:1rem;">Status Distribution</h4>
+                            </div>
+                            <div style="height:250px; position:relative;">
+                                <canvas id="chart-admin-statuses"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. MANAGE COMPLAINTS TAB -->
+                <div class="dashboard-tab" id="tab-admin-manage">
+                    <div class="filter-bar">
+                        <div class="search-input-group">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="admin-filter-search" placeholder="Search by student, ID, title, or location..." oninput="applyAdminFilters()">
+                        </div>
+
+                        <div class="filter-selects">
+                            <select id="admin-filter-status" class="form-select" onchange="applyAdminFilters()">
+                                <option value="all">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="in_progress">In Progress</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+
+                            <select id="admin-filter-category" class="form-select" onchange="applyAdminFilters()">
+                                <option value="all">All Categories</option>
+                                <option value="Hostel">Hostel</option>
+                                <option value="Classroom">Classroom</option>
+                                <option value="Electricity">Electricity</option>
+                                <option value="Water Supply">Water Supply</option>
+                                <option value="Internet and Wi-Fi">Internet & Wi-Fi</option>
+                                <option value="Cleanliness">Cleanliness</option>
+                                <option value="Library">Library</option>
+                                <option value="Laboratory">Laboratory</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Canteen">Canteen</option>
+                                <option value="Other">Other</option>
+                            </select>
+
+                            <select id="admin-filter-priority" class="form-select" onchange="applyAdminFilters()">
+                                <option value="all">All Priorities</option>
+                                <option value="4">Critical (P4)</option>
+                                <option value="3">High (P3)</option>
+                                <option value="2">Medium (P2)</option>
+                                <option value="1">Low (P1)</option>
+                            </select>
+
+                            <select id="admin-filter-sort" class="form-select" onchange="applyAdminFilters()">
+                                <option value="priority_desc">Priority (Max-Heap)</option>
+                                <option value="date_desc">Newest First</option>
+                                <option value="date_asc">Oldest First</option>
+                                <option value="id_asc">Complaint ID</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="glass-card table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Student</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Location</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Manage</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-complaints-tbody">
+                                <tr><td colspan="9" style="text-align:center; color:var(--text-muted); padding:2rem;">Loading complaints...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3. USER MANAGEMENT TAB -->
+                <div class="dashboard-tab" id="tab-admin-users">
+                    <div class="glass-card table-responsive">
+                        <div style="padding:1.5rem; border-bottom:1px solid var(--border-subtle); display:flex; justify-content:space-between; align-items:center;">
+                            <h4 style="font-size:1.05rem;">Campus Registered Users Directory</h4>
+                            <span class="badge badge-low" id="users-count-badge">0 Users</span>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Full Name</th>
+                                    <th>College Email</th>
+                                    <th>Student ID</th>
+                                    <th>Department</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-tbody">
+                                <tr><td colspan="8" style="text-align:center; color:var(--text-muted); padding:2rem;">Loading directory...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. ANALYTICS & REPORTS TAB -->
+                <div class="dashboard-tab" id="tab-admin-analytics">
+                    <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="glass-card kpi-card">
+                            <span class="kpi-title">Average Resolution Time</span>
+                            <div class="kpi-value" style="color:var(--status-resolved);" id="analytics-avg-time">-- hrs</div>
+                            <div class="kpi-subtitle">Calculated via SQLite julianday()</div>
+                        </div>
+                        <div class="glass-card kpi-card">
+                            <span class="kpi-title">Database Storage Mode</span>
+                            <div class="kpi-value" style="color:var(--accent-cyan); font-size:1.6rem;">WAL Mode</div>
+                            <div class="kpi-subtitle">Write-Ahead Logging enabled</div>
+                        </div>
+                        <div class="glass-card kpi-card">
+                            <span class="kpi-title">Algorithm Engine</span>
+                            <div class="kpi-value" style="color:var(--accent-violet); font-size:1.6rem;">C99 Native</div>
+                            <div class="kpi-subtitle">In-memory Max-Heap & Merge Sort</div>
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;" class="responsive-two-col">
+                        <div class="chart-card">
+                            <h4 style="margin-bottom:1rem; font-size:1rem;">Priority Distribution</h4>
+                            <div style="height:280px; position:relative;">
+                                <canvas id="chart-analytics-priority"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h4 style="margin-bottom:1rem; font-size:1rem;">Campus Facility Distribution</h4>
+                            <div style="height:280px; position:relative;">
+                                <canvas id="chart-analytics-facilities"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Status & Priority Action Modal -->
+    <div class="modal-overlay" id="modal-admin-action">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h3 id="action-modal-cid" style="font-family:var(--font-mono); font-size:1.15rem; color:var(--accent-cyan);">CMP-2026-0001</h3>
+                    <div id="action-modal-title" style="font-size:0.95rem; color:var(--text-secondary); margin-top:0.25rem;">Title</div>
+                </div>
+                <button type="button" class="modal-close" onclick="closeAdminActionModal()">&times;</button>
+            </div>
+
+            <form id="form-admin-action" onsubmit="handleAdminActionSubmit(event)">
+                <input type="hidden" id="action-complaint-id">
+
+                <div class="form-group">
+                    <label class="form-label" for="action-status">Complaint Status</label>
+                    <select id="action-status" class="form-select">
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="action-priority">Administrative Priority (Authoritative)</label>
+                    <select id="action-priority" class="form-select">
+                        <option value="1">1 - Low (Routine)</option>
+                        <option value="2">2 - Medium (Standard)</option>
+                        <option value="3">3 - High (Urgent)</option>
+                        <option value="4">4 - Critical (Emergency Dispatch)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="action-remarks">Administrative Remarks / Action Taken</label>
+                    <textarea id="action-remarks" class="form-control" rows="3" placeholder="Enter notes, team assignment details, or resolution summary (will be recorded in audit timeline)..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%;" id="btn-submit-action">
+                    Commit Changes to Database
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

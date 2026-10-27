@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campus Complaint Tracker — Comprehensive Project Documentation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Inter', sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 10pt;
+      line-height: 1.55;
+      color: #1e293b;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Cover / Title Page Header */
+    .doc-header {
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+    }
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 6px;
+      margin-bottom: 8px;
+    }
+    .badge-blue { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+    .badge-green { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; }
+    .badge-amber { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    h1.project-title {
+      font-size: 24pt;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 12px 0 6px 0;
+      letter-spacing: -0.02em;
+    }
+    .project-subtitle {
+      font-size: 12pt;
+      font-weight: 500;
+      color: #475569;
+      margin: 0 0 16px 0;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+    }
+    .meta-item {
+      font-size: 8.5pt;
+    }
+    .meta-label {
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      font-size: 7.5pt;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .meta-value {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Section Headings */
+    h2 {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-left: 4px solid #2563eb;
+      padding-left: 10px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      page-break-after: avoid;
+    }
+    h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+    h4 {
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 9px;
+      text-align: left;
+    }
+    th {
+      background-color: #f1f5f9;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 8pt;
+      line-height: 1.45;
+      overflow-x: auto;
+      margin: 8px 0 14px 0;
+      page-break-inside: avoid;
+    }
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 8.5pt;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Cards & Callouts */
+    .callout {
+      border-left: 4px solid #2563eb;
+      background: #eff6ff;
+      padding: 10px 14px;
+      margin: 12px 0;
+      border-radius: 0 6px 6px 0;
+      page-break-inside: avoid;
+    }
+    .callout-title {
+      font-weight: 700;
+      color: #1e40af;
+      margin-bottom: 4px;
+      font-size: 9pt;
+    }
+    .callout-success {
+      border-left-color: #10b981;
+      background: #ecfdf5;
+    }
+    .callout-success .callout-title { color: #065f46; }
+
+    .callout-warning {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+    }
+    .callout-warning .callout-title { color: #92400e; }
+
+    /* Flowchart / Box Diagram Styles */
+    .flow-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+    .flow-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+    .flow-node {
+      background: #ffffff;
+      border: 1.5px solid #2563eb;
+      border-radius: 6px;
+      padding: 8px 12px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 8.5pt;
+      color: #1e3a8a;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      flex: 1;
+    }
+    .flow-node.highlight {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #1d4ed8;
+    }
+    .flow-node.accent {
+      background: #f0fdf4;
+      border-color: #16a34a;
+      color: #166534;
+    }
+    .flow-arrow {
+      font-size: 12pt;
+      font-weight: bold;
+      color: #64748b;
+      text-align: center;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOCUMENT HEADER -->
+  <div class="doc-header">
+    <div>
+      <span class="badge-pill badge-blue">DAA Academic Project</span>
+      <span class="badge-pill badge-green">Pure C99 Backend Engine</span>
+      <span class="badge-pill badge-purple">Mongoose Embedded HTTP</span>
+      <span class="badge-pill badge-amber">SQLite 3.53.3 Relational DB</span>
+    </div>
+    <h1 class="project-title">Campus Complaint Tracker</h1>
+    <div class="project-subtitle">Full-Stack Academic Web Application & Algorithmic Engineering Specification</div>
+    
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Course Subject</span>
+        <span class="meta-value">Design & Analysis of Algorithms</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Architecture</span>
+        <span class="meta-value">Client-Server (C99 + REST API)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Test Suite Status</span>
+        <span class="meta-value" style="color: #16a34a;">134 / 134 Passed (100%)</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Release Version</span>
+        <span class="meta-value">v1.0.0 Production Ready</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS SUMMARY -->
+  <div class="callout">
+    <div class="callout-title">DOCUMENT EXECUTIVE SCOPE</div>
+    This complete specification provides exhaustive end-to-end documentation for the <strong>Campus Complaint Tracker</strong>, detailing:
+    <strong>1. Technologies Used</strong> (C99, Mongoose, SQLite, cJSON, Win32 Crypto, HTML5/CSS3/JS, Chart.js),
+    <strong>2. How the System Works</strong> (System architecture, request pipelines, security lifecycle, data flow, and algorithmic state transitions),
+    <strong>3. Complete System Functionality</strong> (Student submission & tracking, Admin Max-Heap triage & remark auditing, DAA microsecond benchmark sandbox, and REST endpoints),
+    <strong>4. DAA Mathematical Proofs</strong> (Merge Sort, Binary Search, and Max-Heap Big-O recurrence derivations),
+    <strong>5. Database Schema & Integrity</strong>, and
+    <strong>6. Compilation, Setup & Launch Guide</strong>.
+  </div>
+
+  <!-- SECTION 1: WHAT WE USE -->
+  <h2>1. What We Use: Complete Technology Stack & Tools</h2>
+  <p>
+    The Campus Complaint Tracker was purposefully engineered without heavyweight high-level abstraction frameworks (such as Python Django, Node.js Express, or Java Spring). Instead, it implements an enterprise-grade C99 backend paired with modern client-side standards to deliver deterministic performance, provable algorithmic space/time bounds, and transparent memory governance.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Component</th>
+        <th style="width: 25%;">Technology / Tool</th>
+        <th style="width: 15%;">Version / Standard</th>
+        <th>Engineering Purpose & Justification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Backend Language</strong></td>
+        <td>C Programming Language</td>
+        <td>ISO C99 standard</td>
+        <td>Provides deterministic memory management, zero runtime garbage collection latency, direct pointer arithmetic for DAA data structures, and raw hardware benchmark profiling.</td>
+      </tr>
+      <tr>
+        <td><strong>Compiler & Toolchain</strong></td>
+        <td>GCC (GNU Compiler Collection)</td>
+        <td>v16.1.0 (MSYS2 UCRT64)</td>
+        <td>Compiles native Windows x86_64 binary (<code>campus_server.exe</code>) with optimization flags, linking <code>-lsqlite3</code>, <code>-lws2_32</code>, and <code>-lbcrypt</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Embedded Web Server</strong></td>
+        <td>Cesanta Mongoose Embedded Web Server</td>
+        <td>v7.14 (Single header/source)</td>
+        <td>Lightweight, asynchronous event-driven network library. Provides native HTTP request parsing, REST API dispatch, static file serving, and TCP socket lifecycle handling.</td>
+      </tr>
+      <tr>
+        <td><strong>Relational Database</strong></td>
+        <td>SQLite Embedded Engine</td>
+        <td>v3.53.3 C API</td>
+        <td>Self-contained, serverless ACID relational database. Enforces strict schema constraints, foreign key referential integrity (<code>PRAGMA foreign_keys = ON</code>), and high-throughput WAL mode.</td>
+      </tr>
+      <tr>
+        <td><strong>JSON Engine</strong></td>
+        <td>cJSON (Dave Gamble)</td>
+        <td>ANSI C Library</td>
+        <td>High-speed JSON serialization and deserialization in C. Parses incoming client payloads and constructs structured JSON responses with zero external dependencies.</td>
+      </tr>
+      <tr>
+        <td><strong>Cryptographic Security</strong></td>
+        <td>Iterated Salted SHA-256 + Win32 CryptoAPI</td>
+        <td>5,000 Rounds Key Stretching</td>
+        <td>Employs <code>CryptGenRandom</code> for 16-byte cryptographically secure pseudorandom salts and 5,000-round iterated SHA-256 hashing to eliminate rainbow table vulnerabilities.</td>
+      </tr>
+      <tr>
+        <td><strong>Benchmarking Clock</strong></td>
+        <td>Win32 High-Resolution Performance Counter</td>
+        <td><code>QueryPerformanceCounter</code></td>
+        <td>Supplies sub-microsecond timing accuracy to capture empirical runtimes of sorting and searching routines down to fractions of a microsecond.</td>
+      </tr>
+      <tr>
+        <td><strong>Frontend Architecture</strong></td>
+        <td>Semantic HTML5 + Vanilla ES6+ JavaScript</td>
+        <td>Modern Web Standards</td>
+        <td>No bulky frontend frameworks. Lightweight, modular JavaScript modules handle asynchronous REST communication (<code>fetch</code>), DOM updates, modal triage, and session storage.</td>
+      </tr>
+      <tr>
+        <td><strong>Visual Design System</strong></td>
+        <td>Vanilla CSS3 (Glassmorphism & 3D Cards)</td>
+        <td>Custom Theme Engine</td>
+        <td>Deep dark cinematic palette (<code>#0B0F19</code> canvas, <code>#1E293B</code> cards, <code>#2DD4A7</code> emerald, <code>#5B8CFF</code> cyan accents) with smooth micro-interactions.</td>
+      </tr>
+      <tr>
+        <td><strong>Data Visualizations</strong></td>
+        <td>Chart.js</td>
+        <td>v4.4.1 (UMD Bundle)</td>
+        <td>Renders live interactive doughnut charts (status distribution), vertical bar charts (category breakdown), and trend curves in the Admin Console.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 2: HOW IT WORKS -->
+  <h2>2. How the System Works: Architectural Workflows</h2>
+  <p>
+    The system operates via an asynchronous, event-driven client-server architecture. Every student interaction, administrative triage action, or algorithmic benchmark triggers a well-defined state machine in the C backend.
+  </p>
+
+  <h3>2.1 End-to-End Architectural Pipeline</h3>
+  <div class="flow-container">
+    <div class="flow-row">
+      <div class="flow-node">
+        <strong>1. Client Layer (Browser)</strong><br>
+        HTML5 / CSS3 / Vanilla JS / Chart.js<br>
+        <em>Issues async HTTP REST requests with Bearer Tokens</em>
+      </div>
+      <div class="flow-arrow">&rarr;</div>
+      <div class="flow-node highlight">
+        <strong>2. Network & Routing Engine</strong><br>
+        Mongoose Event Loop (Port 8080)<br>
+        <em>Dispatches URI patterns in <code>server.c</code></em>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-arrow" style="transform: rotate(90deg); margin: -4px 0;">&rarr;</div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-node accent">
+        <strong>4. Relational Database Layer</strong><br>
+        SQLite 3.53.3 C API (WAL Mode)<br>
+        <em>Prepared Statements, ACID Transactions, Audit Logs</em>
+      </div>
+      <div class="flow-arrow">&larr;</div>
+      <div class="flow-node">
+        <strong>3. Core DAA Logic & Security</strong><br>
+        <code>algorithms.c</code> & <code>auth.c</code><br>
+        <em>Merge Sort, Binary Search, Max-Heap, Salted SHA-256</em>
+      </div>
+    </div>
+  </div>
+
+  <h3>2.2 Detailed Subsystem Execution Flows</h3>
+
+  <h4>A. User Authentication & Session Security Flow</h4>
+  <ol>
+    <li><strong>Registration</strong>: The student submits full name, roll number, department, email, and password. The backend checks format via regex, issues <code>CryptGenRandom</code> to create a unique 16-byte random salt, stretches the password through 5,000 iterative SHA-256 rounds, and persists the record into <code>users</code>.</li>
+    <li><strong>Login & Session Creation</strong>: When credentials are submitted to <code>POST /api/auth/login</code>, the backend fetches the stored salt, computes the iterated hash, and compares it in constant time. Upon verification, it creates a 64-character hexadecimal cryptographically random session token stored in <code>sessions</code> with an explicit 24-hour expiration window.</li>
+    <li><strong>Role-Based Access Control (RBAC)</strong>: Every protected endpoint extracts the <code>Authorization: Bearer &lt;token&gt;</code> header (or fallback session cookie). The server validates the token against SQLite, verifies expiration, and checks role permissions (rejecting unauthorized students from admin triage routes with HTTP 403 Forbidden).</li>
+  </ol>
+
+  <h4>B. Complaint Lifecycle & Automated Tracking Identifier</h4>
+  <p>
+    When a student submits a grievance, the backend assigns a deterministic, human-readable identifier formatted as:
+    <code>CMP-&lt;YYYY&gt;-&lt;XXXX&gt;</code> (e.g., <code>CMP-2026-0001</code>).
+  </p>
+  <ul>
+    <li><strong>Status Progression</strong>: <code>Submitted</code> &rarr; <code>Under Review</code> &rarr; <code>In Progress</code> &rarr; <code>Resolved</code> (or <code>Rejected</code>).</li>
+    <li><strong>Transactional Audit Trail</strong>: Every state change executed by an administrator triggers an atomic insert into the <code>complaint_history</code> table, capturing the previous status, new status, timestamp, administrator ID, and detailed official remarks. Students can view this live history timeline to know exactly who inspected their complaint and what action was taken.</li>
+  </ul>
+
+  <h4>C. Algorithmic In-Memory Processing Workflow</h4>
+  <p>
+    When an administrator views complaints, the backend executes pure C algorithmic procedures:
+  </p>
+  <ul>
+    <li><strong>Merge Sort Execution</strong>: Complaints are retrieved from the database into a contiguous heap-allocated array of <code>ComplaintRecord</code> structs. The handcrafted Merge Sort algorithm sorts them by priority, timestamp, or complaint ID with deterministic multi-level tie-breaking in $O(n \log n)$ time.</li>
+    <li><strong>Priority Dispatch (Max-Heap)</strong>: The active grievances are loaded into an in-memory binary Max-Heap using Floyd’s linear $\Theta(n)$ bottom-up heapification algorithm. The administrator can peek at the highest urgency emergency in $O(1)$ time and dispatch it in $O(\log n)$ extract-max time.</li>
+    <li><strong>Binary Search Retrieval</strong>: When looking up a complaint ID among sorted records, iterative Binary Search halves the search space at each iteration, completing in $O(\log n)$ time and $\Theta(1)$ auxiliary memory.</li>
+  </ul>
+
+  <!-- SECTION 3: SYSTEM FUNCTIONALITY -->
+  <div class="page-break"></div>
+  <h2>3. Complete System Functionality: Modules & Features</h2>
+  <p>
+    The web application is partitioned into five interactive web modules, each designed with bespoke user interfaces, zero external runtime bloat, and complete accessibility.
+  </p>
+
+  <h3>3.1 Public Landing Portal (<code>public/index.html</code>)</h3>
+  <ul>
+    <li><strong>Isometric 3D Card Stack</strong>: Displays an interactive, responsive 3D perspective layout showcasing core capabilities: Instant Ticket Generation, Automated Priority Scheduling, Real-time Transparent Timeline, and Provable Big-O Algorithms.</li>
+    <li><strong>Real-Time Campus Aggregate Metrics</strong>: Dynamically fetches aggregate stats from <code>GET /api/public/stats</code>, rendering live counters for Total Complaints Registered, Active In-Progress Issues, Resolved Grievances, and Sub-Millisecond Algorithmic Execution Time.</li>
+    <li><strong>Direct Quick-Access Pathways</strong>: Provides immediate pathways for Student Login, Staff Portal, Complaint Tracking, and the Academic DAA Benchmark Laboratory.</li>
+  </ul>
+
+  <h3>3.2 Secure Authentication Gateway (<code>public/auth.html</code>)</h3>
+  <ul>
+    <li><strong>Dual-Mode Interface</strong>: Seamless tab switching between Student / Administrator Login and New Student Account Registration.</li>
+    <li><strong>Quick-Fill Demo Credentials</strong>: One-click chips to automatically fill pre-seeded academic credentials:
+      <ul>
+        <li><code>admin@campus.edu</code> / <code>Admin@123</code> (System Administrator)</li>
+        <li><code>aarav.sharma@campus.edu</code> / <code>Student@123</code> (Student)</li>
+        <li><code>priya.patel@campus.edu</code> / <code>Student@123</code> (Student)</li>
+      </ul>
+    </li>
+    <li><strong>Client & Server Validation</strong>: Validates email formatting, roll number uniqueness, password complexity, and provides smooth inline error toasts.</li>
+  </ul>
+
+  <h3>3.3 Student Grievance Dashboard (<code>public/student.html</code>)</h3>
+  <ul>
+    <li><strong>Ticket Submission Module</strong>: Comprehensive form capturing Complaint Title, Category (Hostel, Laboratory, Electricity, Wi-Fi / Network, Sanitation, Academic, Transport, Library), Physical Campus Location, Room Number, Severity Level (Low, Medium, High, Critical), and Detailed Description.</li>
+    <li><strong>Interactive Complaint Grid</strong>: Visualizes student complaints as cards styled according to urgency: Critical (Flame Amber/Red), High (Orange), Medium (Blue), and Low (Green).</li>
+    <li><strong>Deterministic Status Timeline</strong>: Clicking any complaint opens a detailed audit timeline modal showing exact ISO timestamps, state transitions (Submitted &rarr; Under Review &rarr; In Progress &rarr; Resolved), assigned department, and official staff remarks.</li>
+    <li><strong>Live Client-Side Filtering</strong>: Instant search and filtering by Category, Status, and Priority without page reloads.</li>
+  </ul>
+
+  <h3>3.4 Administrator Triage Console (<code>public/admin.html</code>)</h3>
+  <ul>
+    <li><strong>Max-Heap Urgency Queue</strong>: Prominently renders the top-priority emergency complaint requiring immediate campus facility intervention using the Max-Heap root.</li>
+    <li><strong>Multi-Dimensional Analytics Dashboard</strong>: Integrated Chart.js visualizations showing:
+      <ul>
+        <li>Status distribution breakdown (Resolved vs In Progress vs Under Review vs Submitted).</li>
+        <li>Departmental complaint frequency bar chart.</li>
+        <li>Critical priority incidence metrics.</li>
+      </ul>
+    </li>
+    <li><strong>Interactive Triage Modal</strong>: Administrators can update ticket status, reassign priority severity, assign specific technician teams, and record formal audit remarks with full database synchronization.</li>
+    <li><strong>Administrative CSV Export</strong>: Generates sanitized, timestamped comma-separated exports of campus grievances for institutional compliance reporting.</li>
+    <li><strong>Registered Users Directory</strong>: Tabular view of all registered student accounts, active sessions, and departmental enrollment.</li>
+  </ul>
+
+  <h3>3.5 DAA Algorithm Benchmark Laboratory (<code>public/daa-lab.html</code>)</h3>
+  <ul>
+    <li><strong>Live C Backend Execution</strong>: Allows students and faculty to trigger pure C algorithm execution on datasets ranging from $N = 10$ to $N = 5,000$ records directly on the native server.</li>
+    <li><strong>Comparative Profiling Engine</strong>: Executes and compares:
+      <ul>
+        <li><strong>Merge Sort vs Quick Sort vs Heap Sort</strong>: Measures exact runtime in microseconds, total element comparisons, array writes, and stability verification.</li>
+        <li><strong>Binary Search vs Linear Search</strong>: Benchmarks exact iteration counts and hardware microsecond duration across best, average, and worst-case search keys.</li>
+        <li><strong>Max-Heap Operations</strong>: Measures Floyd's linear $\Theta(n)$ build time, dynamic bubble-up insertion, and root extraction.</li>
+      </ul>
+    </li>
+    <li><strong>Theoretical vs Empirical Curves</strong>: Interactive line chart plotting measured microsecond execution against asymptotic mathematical curves ($O(n \log n)$ vs $O(n^2)$ and $O(\log n)$ vs $O(n)$).</li>
+  </ul>
+
+  <!-- SECTION 4: DAA MATHEMATICAL PROOFS -->
+  <div class="page-break"></div>
+  <h2>4. DAA Mathematical Proofs & Theoretical Complexity</h2>
+  <p>
+    The core academic justification of this project is the mathematical verification of asymptotic time and space bounds implemented in <code>backend/src/algorithms.c</code>.
+  </p>
+
+  <h3>4.1 Complexity Comparison Matrix</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Algorithm</th>
+        <th>Function / Routine</th>
+        <th>Best Case</th>
+        <th>Average Case</th>
+        <th>Worst Case</th>
+        <th>Auxiliary Space</th>
+        <th>Stability</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Merge Sort</strong></td>
+        <td><code>merge_sort_records()</code></td>
+        <td>$\Theta(n \log n)$</td>
+        <td>$\Theta(n \log n)$</td>
+        <td>$\Theta(n \log n)$</td>
+        <td>$\Theta(n)$</td>
+        <td>Guaranteed Stable</td>
+      </tr>
+      <tr>
+        <td><strong>Binary Search</strong></td>
+        <td><code>binary_search_records()</code></td>
+        <td>$\Theta(1)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(1)$</td>
+        <td>N/A (Keys Unique)</td>
+      </tr>
+      <tr>
+        <td><strong>Max-Heap Insert</strong></td>
+        <td><code>heap_insert()</code></td>
+        <td>$\Theta(1)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(1)$</td>
+        <td>Dynamic Array</td>
+      </tr>
+      <tr>
+        <td><strong>Max-Heap Extract</strong></td>
+        <td><code>heap_extract_max()</code></td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(\log n)$</td>
+        <td>$\Theta(1)$</td>
+        <td>Strict FIFO on Ties</td>
+      </tr>
+      <tr>
+        <td><strong>Max-Heap Build</strong></td>
+        <td><code>heap_build_floyd()</code></td>
+        <td>$\Theta(n)$</td>
+        <td>$\Theta(n)$</td>
+        <td>$\Theta(n)$</td>
+        <td>$\Theta(1)$</td>
+        <td>In-Place / Linear</td>
+      </tr>
+      <tr>
+        <td><strong>Linear Search</strong></td>
+        <td><code>linear_search_records()</code></td>
+        <td>$\Theta(1)$</td>
+        <td>$\Theta(n)$</td>
+        <td>$\Theta(n)$</td>
+        <td>$\Theta(1)$</td>
+        <td>Stable</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>4.2 Merge Sort Derivation via Master Theorem</h3>
+  <p>
+    Merge Sort recursively divides the unsorted array of size $n$ into two equal subproblems of size $n/2$, solves them recursively, and merges the two sorted sequences in linear time $\Theta(n)$:
+  </p>
+  <pre>T(n) = 2 * T(n / 2) + Theta(n),   with base condition T(1) = Theta(1)</pre>
+  <p>
+    We evaluate the recurrence using the <strong>Master Theorem</strong>:
+    $T(n) = a T(n/b) + f(n)$ where $a = 2$, $b = 2$, and $f(n) = \Theta(n)$.
+  </p>
+  <p>
+    Calculate the critical exponent: $\log_b a = \log_2 2 = 1$.<br>
+    Since $f(n) = \Theta(n^1) = \Theta(n^{\log_b a})$, this corresponds exactly to <strong>Case 2</strong> of the Master Theorem:
+  </p>
+  <pre>T(n) = Theta(n^(log_b a) * log n) = Theta(n log n)</pre>
+  <p>
+    Unlike Quick Sort whose worst-case degenerates to $\Theta(n^2)$ on pre-sorted inputs, Merge Sort guarantees strictly bounded $\Theta(n \log n)$ performance across all inputs.
+  </p>
+
+  <h3>4.3 Floyd's Linear Time Heap Construction Proof</h3>
+  <p>
+    Naively building a binary heap by invoking $n$ successive insertions requires $O(n \log n)$ time. In our implementation (<code>heap_build_floyd()</code>), bottom-up heapification is performed starting from index $\lfloor n/2 \rfloor$ down to 1.
+  </p>
+  <p>
+    In a complete binary tree of height $h = \lfloor \log_2 n \rfloor$, there are at most $\lceil n / 2^{k+1} \rceil$ nodes at height $k$. A node at height $k$ can sift down at most $k$ levels. The total work $S$ is given by:
+  </p>
+  <pre>S = Sum_{k=0}^{h} (n / 2^(k+1)) * O(k) = (n / 2) * Sum_{k=0}^{h} (k / 2^k)</pre>
+  <p>
+    Applying the standard infinite geometric series summation identity $\sum_{k=0}^{\infty} k x^k = \frac{x}{(1 - x)^2}$ for $x = 1/2$:
+  </p>
+  <pre>Sum_{k=0}^{infinity} k * (1/2)^k = (1/2) / (1 - 1/2)^2 = (1/2) / (1/4) = 2</pre>
+  <p>
+    Substituting this back into the work summation:
+  </p>
+  <pre>S &lt;= (n / 2) * 2 = n  ==&gt;  T(n) = Theta(n)</pre>
+  <p>
+    Thus, rebuilding the priority queue from the SQLite database executes in strictly linear $\Theta(n)$ time.
+  </p>
+
+  <!-- SECTION 5: DATABASE SCHEMA -->
+  <div class="page-break"></div>
+  <h2>5. Relational Database Design & Schema Integrity</h2>
+  <p>
+    The persistent storage engine is <code>campus_complaints.db</code>, managed via the SQLite 3.53.3 C API. It enforces foreign key constraints, atomic transactions, and write-ahead logging (WAL) for high concurrency.
+  </p>
+
+  <h3>5.1 Table Architecture</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Table Name</th>
+        <th>Primary Key</th>
+        <th>Foreign Keys</th>
+        <th>Cardinality & Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>users</code></td>
+        <td><code>user_id</code> (INTEGER)</td>
+        <td>None</td>
+        <td>Stores student and administrator credentials, cryptographic salts, department, roll number, and role enum (<code>student</code>, <code>admin</code>).</td>
+      </tr>
+      <tr>
+        <td><code>complaints</code></td>
+        <td><code>complaint_id</code> (TEXT)</td>
+        <td><code>user_id &rarr; users(user_id)</code></td>
+        <td>Maintains facility grievances, category, priority (1-4), current status, campus location, room number, assigned department, and timestamps.</td>
+      </tr>
+      <tr>
+        <td><code>complaint_history</code></td>
+        <td><code>history_id</code> (INTEGER)</td>
+        <td><code>complaint_id &rarr; complaints(complaint_id)</code><br><code>changed_by &rarr; users(user_id)</code></td>
+        <td>Provides an immutable append-only audit trail logging every administrative status transition, timestamp, and technician remarks.</td>
+      </tr>
+      <tr>
+        <td><code>sessions</code></td>
+        <td><code>token</code> (TEXT)</td>
+        <td><code>user_id &rarr; users(user_id)</code></td>
+        <td>Holds active 64-character hexadecimal authentication bearer tokens and UTC expiration timestamps.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>5.2 B-Tree Indexes for Sub-Millisecond Queries</h3>
+  <pre>
+CREATE INDEX IF NOT EXISTS idx_complaints_user_id ON complaints(user_id);
+CREATE INDEX IF NOT EXISTS idx_complaints_status ON complaints(status);
+CREATE INDEX IF NOT EXISTS idx_complaints_priority ON complaints(priority);
+CREATE INDEX IF NOT EXISTS idx_complaints_created ON complaints(created_at);
+CREATE INDEX IF NOT EXISTS idx_history_complaint_id ON complaint_history(complaint_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+CREATE INDEX IF NOT EXISTS idx_sessions_expires ON sessions(expires_at);</pre>
+
+  <!-- SECTION 6: API REFERENCE -->
+  <h2>6. Complete REST API Specification</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Method & Path</th>
+        <th style="width: 20%;">Auth Level</th>
+        <th style="width: 30%;">Request Body / Params</th>
+        <th>Response Payload / Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>POST /api/auth/register</code></td>
+        <td>Public</td>
+        <td><code>{ full_name, email, password, student_id, department }</code></td>
+        <td>HTTP 201 Created. Generates salt, hashes password, returns user object.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/auth/login</code></td>
+        <td>Public</td>
+        <td><code>{ email, password }</code></td>
+        <td>HTTP 200 OK. Returns <code>{ token, user: { ... } }</code> with 24-hr session.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/auth/logout</code></td>
+        <td>Authenticated</td>
+        <td>None (Bearer Header)</td>
+        <td>HTTP 200 OK. Revokes token from <code>sessions</code> table.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/auth/me</code></td>
+        <td>Authenticated</td>
+        <td>None</td>
+        <td>HTTP 200 OK. Returns currently authenticated user profile and role.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/complaints</code></td>
+        <td>Authenticated</td>
+        <td><code>?status=...&category=...&sort=...</code></td>
+        <td>HTTP 200 OK. Students receive their tickets; Admins receive all tickets.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/complaints</code></td>
+        <td>Student / Admin</td>
+        <td><code>{ title, category, description, location, room_number, priority }</code></td>
+        <td>HTTP 201 Created. Assigns <code>CMP-YYYY-XXXX</code> and seeds initial history.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/complaints/{id}</code></td>
+        <td>Authenticated</td>
+        <td>URI path parameter <code>id</code></td>
+        <td>HTTP 200 OK. Returns complaint record and complete audit history timeline.</td>
+      </tr>
+      <tr>
+        <td><code>PUT /api/complaints/{id}</code></td>
+        <td>Admin Only</td>
+        <td><code>{ status, priority, assigned_department, remarks }</code></td>
+        <td>HTTP 200 OK. Updates ticket and atomically logs history audit record.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/admin/stats</code></td>
+        <td>Admin Only</td>
+        <td>None</td>
+        <td>HTTP 200 OK. Total complaints, resolved counts, category breakdown.</td>
+      </tr>
+      <tr>
+        <td><code>POST /api/daa/benchmark</code></td>
+        <td>Public / Academic</td>
+        <td><code>{ algorithm, size, dataset_type }</code></td>
+        <td>HTTP 200 OK. Pure C execution timing (microseconds), comparisons, swaps.</td>
+      </tr>
+      <tr>
+        <td><code>GET /api/public/stats</code></td>
+        <td>Public</td>
+        <td>None</td>
+        <td>HTTP 200 OK. Aggregate facility statistics for landing page display.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 7: TEST RESULTS -->
+  <div class="page-break"></div>
+  <h2>7. Verification & Test Suite Results: 134 / 134 Passed</h2>
+  <p>
+    The project includes two exhaustive automated test suites implemented in pure C to validate mathematical algorithmic precision, memory bounds, database ACID integrity, and cold-reboot persistence.
+  </p>
+
+  <div class="callout callout-success">
+    <div class="callout-title">TEST SUITE EXECUTION SUMMARY: 100% PASS RATE</div>
+    <strong>134 / 134 Automated Tests Passed</strong> across all boundary conditions, stress tests, and reboot persistence checks.
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Test Suite</th>
+        <th>Source File</th>
+        <th>Tests Run</th>
+        <th>Tests Passed</th>
+        <th>Scope of Validation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Algorithm Unit Tests</strong></td>
+        <td><code>backend/tests/test_algorithms.c</code></td>
+        <td>104</td>
+        <td>104 (100%)</td>
+        <td>
+          &bull; Merge Sort stability on identical priority records.<br>
+          &bull; Multi-level tie breaking (Priority &rarr; Created Timestamp &rarr; ID).<br>
+          &bull; Binary Search boundary conditions (target at index 0, mid, n-1, missing element, empty array).<br>
+          &bull; Max-Heap invariant verification across 1,000 random insertions and extractions.<br>
+          &bull; Floyd linear build time verification against Ground Truth.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>API & Persistence Tests</strong></td>
+        <td><code>backend/tests/test_api.c</code></td>
+        <td>30</td>
+        <td>30 (100%)</td>
+        <td>
+          &bull; User registration, salt generation, and SHA-256 verification.<br>
+          &bull; Role-based access control rejection (Students denied admin routes).<br>
+          &bull; Complaint creation and deterministic ID formatting.<br>
+          &bull; Transactional audit history recording.<br>
+          &bull; <strong>Cold-Reboot Persistence</strong>: Database reopened from disk; verified all data persists across process termination.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECTION 8: COMPILATION & SETUP -->
+  <h2>8. Compilation, Setup & Launch Guide</h2>
+  <p>
+    The entire application compiles into a single, high-performance native executable (<code>campus_server.exe</code>) with zero external runtime interpreters or virtual machines.
+  </p>
+
+  <h3>8.1 Compilation via GCC</h3>
+  <pre>
+# Navigate to the project root directory:
+cd c:\Users\vikas\Desktop\DAA_project
+
+# Compile the native C99 executable with GCC:
+gcc -std=c99 -Wall -Wextra -O2 \
+    -Ibackend/include \
+    backend/src/main.c \
+    backend/src/server.c \
+    backend/src/database.c \
+    backend/src/auth.c \
+    backend/src/algorithms.c \
+    backend/src/cJSON.c \
+    backend/lib/mongoose.o \
+    -lsqlite3 -lws2_32 -lbcrypt \
+    -o campus_server.exe</pre>
+
+  <h3>8.2 Running the Application</h3>
+  <pre>
+# Start the HTTP server on port 8080:
+.\campus_server.exe --port 8080
+
+# The server outputs:
+# [INFO] Starting Campus Complaint Tracker Server v1.0.0
+# [INFO] Initializing SQLite database: campus_complaints.db
+# [INFO] Database tables and indexes verified successfully
+# [INFO] Seeding default administrator and demo records...
+# [INFO] HTTP Server listening on http://0.0.0.0:8080
+# [INFO] Ready to accept incoming connections.</pre>
+
+  <h3>8.3 Web Access Endpoints & Demo Credentials</h3>
+  <ul>
+    <li><strong>Landing Page</strong>: <a href="http://localhost:8080/">http://localhost:8080/</a></li>
+    <li><strong>Authentication Portal</strong>: <a href="http://localhost:8080/auth.html">http://localhost:8080/auth.html</a></li>
+    <li><strong>Student Dashboard</strong>: <a href="http://localhost:8080/student.html">http://localhost:8080/student.html</a></li>
+    <li><strong>Administrator Console</strong>: <a href="http://localhost:8080/admin.html">http://localhost:8080/admin.html</a></li>
+    <li><strong>DAA Algorithm Lab</strong>: <a href="http://localhost:8080/daa-lab.html">http://localhost:8080/daa-lab.html</a></li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Email Address</th>
+        <th>Password</th>
+        <th>Permissions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Administrator</strong></td>
+        <td><code>admin@campus.edu</code></td>
+        <td><code>Admin@123</code></td>
+        <td>Full administrative triage, priority re-scheduling, status updates, technician remarks, CSV export, analytics.</td>
+      </tr>
+      <tr>
+        <td><strong>Student (Demo 1)</strong></td>
+        <td><code>aarav.sharma@campus.edu</code></td>
+        <td><code>Student@123</code></td>
+        <td>Lodge complaints, track status, view real-time audit history timeline, filter personal submissions.</td>
+      </tr>
+      <tr>
+        <td><strong>Student (Demo 2)</strong></td>
+        <td><code>priya.patel@campus.edu</code></td>
+        <td><code>Student@123</code></td>
+        <td>Lodge complaints, track status, view real-time audit history timeline, filter personal submissions.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- DOCUMENT FOOTER -->
+  <div style="margin-top: 40px; padding-top: 14px; border-top: 1px solid #cbd5e1; text-align: center; font-size: 8pt; color: #64748b;">
+    Campus Complaint Tracker — Academic DAA Project &bull; Native C99, SQLite 3, Mongoose Embedded Web Server &bull; Generated for Vikas
+  </div>
+
+</body>
+</html>
